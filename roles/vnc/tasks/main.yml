@@ -1,0 +1,33 @@
+---
+- name: install vnc servers
+  sudo: yes
+  apt: name={{ item }} state=present
+  with_items:
+    - tightvncserver
+    - x11vnc
+
+- name: Create vnc config directory
+  file: path=~/.vnc/ state=directory mode=0755
+
+- name: copy vnc password "vagrant"
+  copy: src=vnc.pass dest=~/.vnc/passwd mode=0644
+
+- name: configure x11vnc for active X11 session
+  sudo: yes
+  copy: src=x11vnc.conf dest=/etc/init/x11vnc.conf owner=root group=root mode=0644
+
+- name: enable x11vnc
+  service: name=x11vnc enabled=yes state=started
+  sudo: yes
+  notify:
+  - restart x11vnc
+  
+- name: configure tightvnc for new X11 session
+  sudo: yes
+  template: src=tightvnc.j2 dest=/etc/init.d/tightvnc owner=root group=root mode=0755
+
+- name: enable tightvnc
+  service: name=tightvnc enabled=yes state=started
+  sudo: yes
+  notify:
+  - restart tightvnc

@@ -1,0 +1,6 @@
+---
+guest_name: guest
+guest_password_crypted: U6aMy0wojraho #it is empty password hash
+guest_root: /home
+
+app_url: http://kiosk/

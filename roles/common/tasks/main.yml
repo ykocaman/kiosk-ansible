@@ -1,0 +1,10 @@
+---
+  
+- name: update apt cache
+  sudo: yes
+  apt: update-cache=yes
+  tags: common
+
+- name: change keyboard layout (setxkbmap tr)
+  sudo: yes
+  lineinfile: dest=/etc/default/keyboard regexp="XKBLAYOUT=\"us\"" line="XKBLAYOUT=\"tr\"" state=present

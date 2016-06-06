@@ -1,0 +1,8 @@
+---
+- name: restart x11vnc
+  service: name=x11vnc state=restarted
+  sudo: yes
+
+- name: restart tightvnc
+  service: name=tightvnc state=restarted
+  sudo: yes

@@ -1,0 +1,4 @@
+---
+- name: restart lxdm
+  service: name=lxdm state=restarted
+  sudo: yes

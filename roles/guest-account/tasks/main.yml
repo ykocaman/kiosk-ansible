@@ -1,0 +1,36 @@
+---
+- name: create Guest user
+  action: user name={{ guest_name }} password={{ guest_password_crypted }} home={{ guest_root }}/{{ guest_name }}
+  sudo: yes
+
+- name: configure auto-login to Guest
+  lineinfile: dest=/etc/lxdm/lxdm.conf regexp="autologin=" line="autologin={{ guest_name }}" state=present
+  sudo: yes
+
+- name: disable user list at login screen
+  sudo: yes
+  action: lineinfile dest=/etc/lxdm/lxdm.conf regexp="disable=0" line="disable=1" state=present
+
+- name: create guest dmrc
+  sudo: yes
+  copy: src=guest-dmrc dest={{ guest_root }}/{{ guest_name }}/.dmrc owner={{ guest_name }} group={{ guest_name }} mode=0755
+
+- name: create config directory
+  file: path={{ guest_root }}/{{ guest_name }}/.config state=directory owner={{ guest_name }} group={{ guest_name }} mode=0755
+  sudo: yes
+
+- name: create openbox-autostart directory
+  file: path={{ guest_root }}/{{ guest_name }}/.config/openbox/ state=directory owner={{ guest_name }} group={{ guest_name }} mode=0755
+  sudo: yes
+
+- name: compile autostart script
+  sudo: yes
+  template: src=guest-autostart.j2 dest={{ guest_root }}/{{ guest_name }}/.config/openbox/autostart owner={{ guest_name }} group={{ guest_name }} mode=0755
+
+- name: disable context menu
+  sudo: yes
+  copy: src=guest-menu.xml dest={{ guest_root }}/{{ guest_name }}/.config/openbox/menu.xml owner={{ guest_name }} group={{ guest_name }} mode=0644
+
+- name: create user dmrc
+  sudo: yes
+  copy: src=user-dmrc dest=/home/{{ ansible_ssh_user }}/.dmrc

@@ -1,0 +1,20 @@
+---
+- name: install feh
+  sudo: yes
+  apt: name={{ item }} state=present
+  with_items:
+    - feh
+
+- name: copy wallpaper
+  sudo: yes
+  copy: src=background.png dest=/usr/share/backgrounds/default.png
+
+- name: configure guest's wallpaper
+  lineinfile: dest={{ guest_root }}/{{ guest_name }}/.config/openbox/autostart regexp="^feh" line="feh --bg-scale /usr/share/backgrounds/default.png" insertbefore="BOF" state=present
+  sudo: yes
+
+- name: Create user's config directory
+  file: path=~/.config/pcmanfm/LXDE/ state=directory mode=0755
+
+- name: configure user's wallpaper
+  copy: src=desktop-items-0.conf dest=/home/{{ ansible_ssh_user }}/.config/pcmanfm/LXDE/desktop-items-0.conf force=yes

@@ -1,0 +1,22 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides: vncserver
+# Required-Start: networking
+# Default-Start: S
+# Default-Stop: 0 6
+### END INIT INFO
+
+export USER="{{ ansible_ssh_user }}"
+ 
+case "$1" in
+start)
+su ${USER} -c "/usr/bin/tightvncserver :1"
+;;
+ 
+stop)
+su ${USER} -c "/usr/bin/tightvncserver -kill :1"
+;;
+
+esac
+ 
+exit 0
