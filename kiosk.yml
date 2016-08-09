@@ -2,10 +2,10 @@
 - hosts: all
   user: vagrant
   roles:
-    #- swapfile
-    #- common
-    #- lxdm
-    #- chromium
-    #- guest-account
-    #- gui-modification
+    - swapfile
+    - common
+    - lxdm
+    - chromium
+    - guest-account
+    - gui-modification
     - vnc
